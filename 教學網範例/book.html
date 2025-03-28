@@ -1,0 +1,431 @@
+
+<!-- Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+ 
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+ 
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+ 
+<!-- Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- bootstrap icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css ">
+
+<!-- fontawesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- vue -->
+<script src="https://unpkg.com/vue@3"></script>
+
+<!-- google fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="Content/Cloud3.css">
+
+<style>
+    .yellowBg {
+        background-color: #f6ccaa;
+    }
+
+    .blueBg {
+        background-color: #8bc4e9;
+    }
+    .w400 {
+        width: 400px;
+    }
+
+    .customtip{
+        position: relative;
+        cursor: default;
+        text-align: center;
+    }
+    .customtip-text{
+        position: absolute;
+        top:0px;
+        left: 0px;
+        background-color: #000;
+        color: #fff;
+        line-height: 20px;
+        font-size: 16px;     
+        max-width: 100%;
+        border-radius: 5px;
+        padding: 0px 5px;
+    }
+
+    .searchBar {
+        border: 1px solid #87bdd3;
+        margin-right: 16px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+.searchBar input[type=text] {
+  padding: 6px;
+  font-size: 16px;
+  border: none;
+}
+
+.searchBar button {
+  padding: 10px;
+  background: #ddd;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.searchBar button:hover {
+  background: #ccc;
+}
+
+@media (max-width: 768px) {
+    .searchBar {
+        width: 100%;
+        margin-top: 6px;
+    }
+    .searchBar input[type=text] {
+        width: 92%;
+    }
+    .searchBar button {
+        width: 8%;
+    }
+}
+</style>
+
+<div id="app">
+    <section class="contents p-3">
+        <div class="d-flex flex-column">
+            <div class="d-flex justify-content-start align-items-start" style="background-color: #f2f9f9;">
+                <div class="py-2 px-3">
+                    <img style="width: 120px;" alt="普高國文(一)(111版)" src="images/book.gif">
+                </div>
+                <div class="w-100">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap text-center p-3">
+                        <div class="d-flex align-items-center text-center">
+                            <p class="mb-1 mr-3">普高國文(一)(111版)</p>
+                            <div class="cddrop">
+                                <a class="book_btn text-center" href="#">&ensp;資源光碟下載&ensp;<i class="bi bi-caret-down-fill" style="font-size: .6rem;"></i></a>
+                                <div class="cdBox block p-3" id="cdBox">
+                                    <a href="#" v-for="item in cd"><p class="px-1">{{item}}</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="searchBar">
+                            <form>
+                                <input type="text" placeholder="Search.." name="search">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-2 text-lg-center pr-0">
+                            <label class="checkallBox chaptersall"><input type="checkbox" id="chapters" name="chapters" class="check-all" v-model="selectAllS" @change="checkAllforS">&emsp;章&emsp;&emsp;節</label>
+                        </div>
+                        <div class="col-12 col-lg-10 customtip-area">
+                            <div class="dropdown chapters checkbox-option px-3 customtip" :title="item.title" style="width: auto;" v-for="(item, index) in chapters" :key="index">
+                                <label class="m-0" ><input type="checkbox" style="cursor: pointer;" :id="item.title" :name="item.title" v-model="item.checked" @change="checkOption(index)">&ensp;{{item.class}}</label>
+                                
+                            </div>
+                        <div class="customtip-text bg-dark" style="display: none;">
+            
+                        </div>
+                        </div>
+                        
+                    </div>
+                    <hr class="w-100" style="border-color:#e2f0f1;">
+                
+                    <div class="row">
+                        <div class="col-12 col-lg-2 text-lg-center pr-0">
+                            <label class="check-all checkallBox"><input type="checkbox" id="checkall" name="material" v-model="selectAll" @change="checkAllfor">&emsp;教材種類</label>
+                        </div>
+                        <div class="col-12 col-lg-10">
+                            <div class="dropdown" v-for="(firstLevel, index) in material"  :key="index">
+                                <div class="d-flex justify-content-around align-items-center" :class="{ yellowBg: firstLevelYellow(index), blueBg: firstLevelRed(index) }">
+                                    <label class="my-1"><input type="checkbox" :id="firstLevel.title" :name="firstLevel.title" class="check-all" v-model="firstLevel.checked" @change="checkFirstLevel(index)">&ensp;{{firstLevel.title}}</label><i class="bi bi-caret-down-fill" style="font-size: .6rem;"></i>
+                                </div>
+                                <div class="dropdown-list">
+                                    <div :class="{ 'w400': firstLevel.level2.length > 6 }">
+                                        <label class="dropdown-option" v-for="(secondLevel, sIndex) in firstLevel.level2"><input type="checkbox" :id="secondLevel.label" :name="secondLevel.label" v-model="secondLevel.checked" @change="checklevel2(index)">&emsp;{{secondLevel.label}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="w-100" style="border-color:#e2f0f1;">
+                
+                    <div class="row">
+                        <div class="col-12 col-lg-2 text-lg-center pr-0">
+                            <label class="checkallBox"><input type="checkbox" class="check-all" v-model="selectAllf" @change="checkAllforf">&emsp;檔案類型</label>
+                        </div>
+                        <div class="col-12 col-lg-10">
+                            <label v-for="(fileName, findex) in files" :key="findex" class="checkbox-option" style="width: 80px;"><input type="checkbox" style="cursor: pointer;" :id="fileName.label" :name="fileName.label" v-model="fileName.checked"  @change="checkOptionf(index)">&emsp;{{fileName.label}}</label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <br>
+
+            <div class="w-100 result mx-3">
+                <div class="w-100 d-flex justify-content-end align-items-center">
+                    <p class="text_align_e mobilehide mx-3"><a href=""class=" text_align_e button ml-auto"><i class="fa-brands fa-google-drive"></i>一鍵雲端(<span id="counterCloud">{{ checkedCount }}</span>)</a></p>
+                    <p class="text_align_e mobilehide mx-3"><a href=""class=" text_align_e button ml-auto"><i class="fa-solid fa-download"></i>一鍵下載(<span id="counterDownload">{{ checkedCount }}</span>)</a></p>
+                </div>
+                <div class="w-100 row justify-content-center align-items-center" style="height: 50px; background-color: #f2f9f9;">
+                    <div class="col-1 text-center">
+                        <label class="checkallBox pre-check"><input type="checkbox" class="check-all" v-model="allChecked" @change="toggleAllChecked"></label>
+                    </div>
+                    <div class="col-6">檔案名稱</div>
+                    <div class="col-1 text-center">雲端</div>
+                    <div class="col-1 text-center">下載</div>
+                    <div class="col-1 text-center">預覽</div>
+                    <div class="col-2">檔案大小</div>
+                </div>
+                <div class="darkscrollbar mr-4">
+                    <div class="row pre-option align-items-center py-1" v-for="item in result">
+                        <div class="col-1 checkbox-option text-center"><input type="checkbox" :name="item.title" :id="item.title" v-model="item.checked"></div>
+                        <div class="col-6 d-flex align-items-center"><img style="max-width: 40px;" :src="item.title ? 'images/png/' + item.title.slice(-3) + '.png' : ''" :alt="item.title">&emsp;<label :for="item.title">{{item.title}}</label></div>
+                        <div class="col-1 text-center"><a href="#"><i class="fa-brands fa-google-drive"></i></a></div>
+                        <div class="col-1 text-center"><a href="#"><i class="fa-solid fa-download"></i></a></div>
+                        <div class="col-1 text-center"><a href="#" v-if="item.preview == true"><i class="fa-regular fa-file-image"></i></a></i></div>
+                        <div class="col-2">{{item.size}}</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+</div>
+    
+  
+
+<script>
+    $(document).ready(function() {
+    $(".dropdown").hover(
+        function() {
+            $(this).find('.dropdown-list').stop(true, true).fadeIn("fast");
+        },
+        function() {
+            $(this).find('.dropdown-list').stop(true, true).fadeOut("fast");
+        }
+    );
+    $(".cddrop").hover(
+        function() {
+            $(this).find('.cdBox').stop(true, true).fadeIn("fast");
+        },
+        function() {
+            $(this).find('.cdBox').stop(true, true).fadeOut("fast");
+        }
+    );
+    $('.customtip').hover(function(){
+                var fs=20,lh=24;
+                var text=$(this).attr('title'),
+                    $tip=$('.customtip-text');
+                var ch=$(this).height(); 
+                $tip.show();
+                var p=$(this).position();   
+                $tip.text(text);                          
+                $tip.css('left',p.left);
+                $tip.css('top',p.top + ch);  //dom_height + padding + border_width  
+                console.log('ch='+ch);
+             
+                var h=$tip.height();
+                var line=h/lh;
+                if(line>=2){ //行數>2
+                    $tip.css('left','auto');
+                    $tip.css('right',0);
+                }else{
+                    $tip.css('right','auto');
+                }
+                    
+            });
+            $('.customtip-area').mouseleave(function(){
+                $('.customtip-text').hide();
+
+            })
+    
+});
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                cd: ['教學資源光碟','題庫光碟','學測模擬光碟','分冊模擬光碟','統測模擬光碟','電子書光碟'],
+                selectAll: false,
+                selectAllS: false,
+                selectAllf: false,
+                chapters: [
+                    { class: '第一課', title: '第一課從「感覺」到「事實」的差距', checked: false},
+                    { class: '第二課', title: '第二課桃花源記', checked: false},
+                    { class: '第三課', title: '第三課記憶中的一爿書店', checked: false},
+                    { class: '第四課', title: '第四課師說', checked: false},
+                    { class: '第五課', title: '第五課現代詩選', checked: false},
+                    { class: '第六課', title: '第六課醉翁亭記', checked: false},
+                    { class: '第七課', title: '第七課髻', checked: false},
+                    { class: '第八課', title: '第八課樂府詩選', checked: false},
+                    { class: '第九課', title: '第九課貧賤夫妻', checked: false},
+                    { class: '第十課', title: '第十課項脊軒志', checked: false},
+                    { class: '第十一課', title: '第十一課無關歲月', checked: false},
+                    { class: '第十二課', title: '第十二課孔乙己', checked: false},
+                    { class: '文教論語選讀一', title: '文教論語選讀一找到自己的志向', checked: false},
+                    { class: '文教論語選讀二', title: '文教論語選讀二如何立身處世', checked: false},
+                    { class: '文教論語選讀三', title: '文教論語選讀三為學的方法', checked: false},
+                    { class: '文教論語選讀一~三', title: '文教論語選讀一~三', checked: false},
+                    { class: '不分課', title: '不分課', checked: false},
+                    { class: '文選1', title: '文選1世說新語選', checked: false},
+                    { class: '文選2', title: '文選2傷仲永', checked: false},
+                    { class: '文選3', title: '文選3夢溪筆談選', checked: false},
+                    { class: '文選4', title: '文選4樂府詩選', checked: false},
+                    { class: '文選5', title: '文選5左忠毅公逸事', checked: false},
+                    { class: '文選6', title: '文選6石頭記', checked: false},
+                    { class: '文選7', title: '文選7范進中舉', checked: false},
+                    { class: '自學', title: '自學1~4', checked: false},
+                ],
+                material: [
+                    { title: '教材電子檔', checked: false, level2: [{label: '課本', checked: false}] },
+                    { title: '教學動畫&影片', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義'}] },
+                    { title: '教學補充資料', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行'}] },
+                    { title: '教學投影片', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '素課達&素養培力多', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '議起玩國文', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '評量卷', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '互動式迷你卷', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '國文快遞（期刊）', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '寫作教材', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '歷屆大考試題', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '模擬試題', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: 'Google測驗', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                    { title: '資源光碟', checked: false, level2: [{label: '課本', checked: false},{label: '備課用書', checked: false},{label: '教師手冊', checked: false},{label: '隨身讀', checked: false},{label: '隨堂互動本', checked: false},{label: '課堂旅行', checked: false},{label: '學習講義', checked: false},{label: '語文養成習作', checked: false},{label: '語文能力習作', checked: false},{label: '隨堂習作', checked: false},{label: '習作', checked: false},{label: '閱讀文選', checked: false},{label: '閱讀文選備課用書', checked: false},{label: '學習單', checked: false},{label: '閱讀文選課文理解力', checked: false},{label: '心智圖', checked: false}] },
+                ],
+                files: [
+                    {label: 'word', checked: false },
+                    {label: 'pdf', checked: false },
+                    {label: 'ppt', checked: false },
+                    {label: 'zip', checked: false },
+                    {label: 'rar', checked: false },
+                ],
+                result: [
+                    { title: '109.06國文快遞第105期-引發動機並逐步深化思考的4F引導提問法─以〈散戲〉為例.pdf', preview: false, size: '20.3MB' },
+                    { title: '108.11國文快遞第100期-出師表新解(上)─從文本解讀到說服文寫作模組.doc', preview: true, size: '20.3MB' },
+                    { title: '107.06國文快遞第90期-楚漢風雲Online─鴻門宴分組延伸閱讀思辨.jpg', preview: true, size: '20.3MB' },
+                    { title: '108.12國文快遞第101期-出師表新解(下)─從說服藝術到PNP溝通.png', preview: true, size: '20.3MB' },
+                    { title: '109.05國文快遞第104期-有一些人的出現，是為了修正你──談劉姥姥.ppt', preview: false, size: '20.3MB' },
+                    { title: '109.10國文快遞第107期-透過說故事學習文言文，激發編劇力與理解力.zip', preview: false, size: '20.3MB' },
+                    { title: '109.11國文快遞第108期-島內散步X《素課達》──散步中看見素養.rar', preview: false, size: '20.3MB' },
+                    { title: '109.09國文快遞第106期-國文素養培力多──素養教學的好幫手.ttf', preview: false, size: '20.3MB' },
+                    { title: '110.11國文快遞第116期_當文本遇上文本_主題式教學的力與利.xls', preview: false, size: '20.3MB' },
+                    { title: '107.9國文快遞國文快遞第91期-多元選修課程心得分享-敘情詩.doc', preview: true, size: '20.3MB' },
+                    { title: '11203國文快遞第126期_國文素養教學_儒道墨法桌遊牌卡設計.pdf', preview: false, size: '20.3MB' },
+                    { title: '107.12國文快遞第94期-這一堂，看見瓦舍勾欄裡的故事人生.ppt', preview: false, size: '20.3MB' },
+                    { title: '11103國文快遞第118期_學測國綜閱讀題組及混合題型分析.jpg', preview: true, size: '20.3MB' },
+                    { title: '110.06國文快遞第113期-結合課堂與活動，產出學習歷程.pdf', preview: false, size: '20.3MB' },
+                    { title: '11103東大技高國文特刊3月號_快速有效提升學生閱讀素養.zip', preview: false, size: '20.3MB' },
+                    { title: '108.6國文快遞第98期-逃出項脊軒──真人實境密室逃脫.jpg', preview: false, size: '20.3MB' },
+                    { title: '107.10國文快遞第92期-誰是金頭腦，翻轉學測裡的桌遊.pdf', preview: true, size: '20.3MB' },
+                    { title: '109.03國文快遞第102期-我是策展人──孟子創意展.pdf', preview: false, size: '20.3MB' },
+                    { title: '110.03國文快遞第110期-有了學習歷程檔案，然後呢.jpg', preview: true, size: '20.3MB' },
+                    { title: '11105國文快遞第120期_提問激發思考_思考啟動探究.zip', preview: false, size: '20.3MB' },
+                    { title: '110.05國文快遞第112期-翻轉課堂，超前部署混合題.zip', preview: false, size: '20.3MB' },
+                    { title: '110.10國文快遞第115期_孔乙己課堂活動記錄與省思.png', preview: false, size: '20.3MB' },
+                ],
+                allChecked: false
+            };
+        },
+        computed: {
+            checkedCount() {
+            // 计算选中的复选框数量
+            return this.result.filter(item => item.checked).length;
+            }
+        },
+        methods: {
+            checkAllforS() {
+                this.chapters.forEach((item) => {
+                    item.checked = this.selectAllS;
+                });
+            },
+            checkOption(index) {
+                const allChecked = this.chapters.every((item) => item.checked);
+                this.selectAllS = allChecked;
+            },
+            checkAllforf() {
+                this.files.forEach((item) => {
+                    item.checked = this.selectAllf;
+                });
+            },
+            checkOptionf(index) {
+                const allChecked = this.files.every((item) => item.checked);
+                this.selectAllf = allChecked;
+            },
+            checkAllfor() {
+                this.material.forEach((firstLevel) => {
+                    firstLevel.checked = this.selectAll;
+                    firstLevel.level2.forEach((secondLevel) => {
+                        secondLevel.checked = this.selectAll;
+                    });
+                });
+            },
+            checkFirstLevel(index) {
+                const firstLevel = this.material[index];
+                const allFirstChecked = this.material.every((firstLevel) => firstLevel.checked);
+                const allSecondChecked = firstLevel.level2.every((secondLevel) => secondLevel.checked);
+
+                if (firstLevel.checked) {
+                    firstLevel.level2.forEach((secondLevel) => {
+                        secondLevel.checked = true;
+                    });
+                } else {
+                    firstLevel.level2.forEach((secondLevel) => {
+                        secondLevel.checked = false;
+                    });
+                }
+
+                this.selectAll = allFirstChecked;
+                this.updateSelectAll();
+            },
+            checklevel2(index) {
+                const firstLevel = this.material[index];
+                const allSecondChecked = firstLevel.level2.every((secondLevel) => secondLevel.checked);
+
+                if (allSecondChecked) {
+                    firstLevel.checked = true;
+                } else {
+                    firstLevel.checked = false;
+                }
+
+                this.updateSelectAll();
+            },
+            updateSelectAll() {
+                const allFirstChecked = this.material.every((firstLevel) => firstLevel.checked);
+                this.selectAll = allFirstChecked;
+            },
+            firstLevelYellow(index) {
+                const firstLevel = this.material[index];
+                const someSecondChecked = firstLevel.level2.some((secondLevel) => secondLevel.checked);
+                return someSecondChecked && !firstLevel.checked;
+            },
+            firstLevelRed(index) {
+                const firstLevel = this.material[index];
+                const allSecondChecked = firstLevel.level2.every((secondLevel) => secondLevel.checked);
+                return allSecondChecked && firstLevel.checked;
+            },
+            toggleAllChecked() {
+            // 将全选状态应用到所有复选框
+            this.result.forEach(item => (item.checked = this.allChecked));
+            // 直接计算 checkedCount
+            this.$nextTick(() => {
+                this.$forceUpdate(); // 强制更新
+            });
+            }
+        },
+        mounted() {
+            this.allChecked = this.result.every(item => item.checked);
+        }
+    });
+
+    app.mount('#app');
+
+</script>

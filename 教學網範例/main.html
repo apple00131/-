@@ -1,0 +1,181 @@
+<!-- Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+ 
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+ 
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+ 
+<!-- Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- bootstrap icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css ">
+
+<!-- fontawesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- vue -->
+<script src="https://unpkg.com/vue@3"></script>
+
+<!-- google fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet" />
+
+<!-- 引入 Swiper 样式 -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<!-- 引入 Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="Content/Cloud3.css">
+
+<section id="app1" class="contents px-3">
+    <div class="row">
+        <div class="col-12 col-lg-10" style="padding-top: 10px; margin: auto;">
+            <div id="carouselExampleIndicators" class="carousel slide w-100" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="images/910_1.gif" class="d-block w-100" >
+                  </div>
+                  <div class="carousel-item">
+                    <img src="images/910_2.gif" class="d-block w-100" >
+                  </div>
+                  <div class="carousel-item">
+                    <img src="images/910_3.gif" class="d-block w-100" >
+                  </div>
+                  <div class="carousel-item">
+                    <img src="images/910_4.gif" class="d-block w-100" >
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <i class="fa-solid fa-caret-left" style="color: #333; background-color: #ffffff;font-size: 20px; border-radius: 15px; border: 1px solid #333; padding: 5px 10px;"></i>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <i class="fa-solid fa-caret-right" style="color: #333; background-color: #ffffff;font-size: 20px; border-radius: 15px; border: 1px solid #333; padding: 5px 10px;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container px-5 py-1 user_mainSub" v-if="MainDivSub && MainDivSub.length > 0" v-for="Ditem in MainDivSub">
+      <a :href="Ditem.DivNMurl"><h3 class="m-0">{{Ditem.DivNM}}</h3></a>
+      <div>
+          <div class="swiper-container" style="height: auto;">
+            <div class="swiper-wrapper" style="height: auto;">
+              <div v-if="Ditem.books && Ditem.books.length > 0" v-for="book in Ditem.books" :key="book.id" class="swiper-slide">
+                <a :href="book.url" class="card">
+                  <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+                    <img class="img-fluid" :alt="book.title" :src="book.src ? book.src : 'images/book_n.gif'" />
+                  </div>
+                  <div class="card-body">
+                    <p class="card-title">{{ book.title }}</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          </div>
+        </div>
+    </div>
+</section>
+
+<script>
+const app1 = Vue.createApp({
+        data() {
+            return {
+              MainDivSub: [{
+                    DivNM: '國文',
+                    DivNMurl:"page1.html",
+                    books: [
+                        { src: "", url: "book.html", title: "高中國文全六冊(101課綱)" },
+                        { src: "", url: "book.html", title: "高職國文全六冊(99課綱)" },
+                        { src: "", url: "book.html", title: "普高國文(一)(111版)" },
+                        { src: "", url: "book.html", title: "普高國文(二)(111版)" },
+                        { src: "", url: "book.html", title: "普高國文(三)(111版)" },
+                        { src: "", url: "book.html", title: "文教全二冊(101課綱)" },
+                        { src: "", url: "book.html", title: "技高國文１(110版)" },
+                        { src: "", url: "book.html", title: "技高國文２(110版)" },
+                        { src: "", url: "book.html", title: "技高國文３(110版)" },
+                        { src: "", url: "book.html", title: "技高國文５(110版)" },
+                    ]
+                },
+                {
+                    DivNM: '英文',
+                    DivNMurl:"page2.html",
+                    books: [
+                        { src: "", url: "book.html", title: "普高國文(三)(111版)" },
+                        { src: "", url: "book.html", title: "文教全二冊(101課綱)" },
+                        { src: "", url: "book.html", title: "技高國文１(110版)" },
+                        { src: "", url: "book.html", title: "技高國文２(110版)" },
+                        { src: "", url: "book.html", title: "技高國文３(110版)" },
+                        { src: "", url: "book.html", title: "技高國文５(110版)" },
+                    ]
+                }],
+                swiperOptions: {
+                    slidesPerView: 4,
+                    spaceBetween: 10,
+                    navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                    },
+                    pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    },
+                },
+            }
+        },
+        computed: {
+            filteredSlides() {
+            // 根据当前显示的 slidesPerView 过滤 slides
+            return this.books.slice(0, this.swiperOptions.slidesPerView);
+            },
+        },
+        mounted() {
+            this.initializeSwiper();
+
+            // 监听窗口大小变化
+            window.addEventListener('resize', this.handleResize);
+        },
+        methods: {
+            initializeSwiper() {
+            // 初始化 Swiper
+            this.swiper = new Swiper('.swiper-container', this.swiperOptions);
+            },
+            handleResize() {
+            // 根据窗口大小动态调整 slidesPerView 的值
+            const screenWidth = window.innerWidth;
+
+            if (screenWidth >= 1200) {
+                this.swiperOptions.slidesPerView = 4;
+            } else if (screenWidth >= 768) {
+                this.swiperOptions.slidesPerView = 3;
+            } else {
+                this.swiperOptions.slidesPerView = 2;
+            }
+
+            // 更新 Swiper 实例
+            this.initializeSwiper();
+            },
+        },
+        beforeDestroy() {
+            // 移除窗口大小变化事件监听
+            window.removeEventListener('resize', this.handleResize);
+        },
+    })
+    app1.mount("#app1");
+</script>

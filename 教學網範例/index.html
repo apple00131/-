@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>教學雲</title>  
+<!-- Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+ 
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+ 
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+ 
+<!-- Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- bootstrap icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css ">
+
+<!-- fontawesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- vue -->
+<script src="https://unpkg.com/vue@3"></script>
+
+<!-- google fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Noto+Sans+HK:wght@400;500;700;900&family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="Content/Cloud3.css">
+
+<style>
+    .btn_blue {
+        color: #0b5d5d;
+    }
+    .btn_green {
+        color: #3e98d2;
+    }
+    .btn_orange {
+        color: #dd8115;
+    }
+
+</style>
+
+</head>
+<body>
+
+    <div id="app" >
+       
+        <div class="row" style="background-color: #e2f0f1;">
+            <!-- left menu -->
+            <div class="col-2 p-none">
+                <div class="nav_logo py-3 pl-3">
+                    <a href="index.html">
+                        <img class="w-100" src="images/logo.png" alt="LOGO">
+                    </a>
+                </div>
+                <div class="sub_menu pl-3">
+                    <div><button class="sub_btn" style="cursor: pointer;">輔材/一般書</button></div>
+                    <div v-for="subject in subjects">
+                        <button class="sub_btn" @click="handleSubjectClick(subject.page),changeBreadcrumb(subject.title)" v-if="subject.limits == 'all'">{{subject.title}}</button>
+                        <button class="sub_btn partBtn" @click="handleSubjectClick(subject.page),changeBreadcrumb(subject.title)" v-else-if="subject.limits == 'partially'">{{subject.title}}</button>
+                        <p class="sub_btn" v-else style="background-color: #bbbbbb;">{{subject.title}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            <div class="col-12 col-lg-10 p-0">
+                <!-- header -->
+                <header>
+                        <div class="top_header">
+                            <div class="d-none pl-5" @click="openBox()"><i class="bi bi-list"></i></div>
+        
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="nav_logo d-none">
+                                    <a href="index.html">
+                                        <img class="w-100" src="images/logo.png" alt="LOGO">
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center pr-2 p-none">
+                                    <a class="nav_btn bg-white" :class="option.color" v-for="option in nav_options" :href="option.url"><img :src="option.img" >{{option.title}}</a>
+                                </div>
+                            </div>
+        
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="p-none d-flex justify-content-center align-items-center ">
+                                    <a href="#" style="margin: 0 5px;" title="聯絡我們"><i class="fa-regular fa-envelope fz-22"></i></a>
+                                    <a href="#" style="margin: 0 5px;" title="聲明說明"><i class="fa-regular fa-copyright fz-22"></i></a>
+                                    <a href="#" style="margin: 0 5px;" title="Q & A"><i class="fa-regular fa-circle-question fz-22"></i></a>
+                                </div>
+                                <div class="userdrop">
+                                    <a class="p-1200-none user_btn d-flex justify-content-center align-items-center" href="#"><img src="images/people.png" >&ensp;Marc Malonzo (墨馬克)老師</a>
+                                    <a class="d-1200-none" href="#"><img class="user_sm_img user_btn" src="images/people.png" ></a>
+                                    <div class="userBox block" id="userBox">
+                                        <div class="d-flex flex-column justify-content-center align-items-start p-3">
+                                            <a class="px-3" href="#">Marc Malonzo (墨馬克)老師</a>
+                                            <hr class="w-100" style="border-color:#e2f0f1;">
+                    
+                                            <div class="d-flex flex-column px-2" style="font-size: 16px;">
+                                                <a href="#" style="margin: 5px;" title="聯絡我們"><i class="fa-regular fa-envelope"></i>&ensp;聯絡我們</a>
+                                                <a href="#" style="margin: 5px;" title="聲明說明"><i class="fa-regular fa-copyright"></i>&ensp;聲明說明</a>
+                                                <a href="#" style="margin: 5px;" title="Q & A"><i class="fa-regular fa-circle-question"></i>&ensp;常見問題</a>
+                                            </div>
+                                            
+                                            <hr class="w-100" style="border-color:#e2f0f1;">
+                                            <a class="px-3" href="#"><i class="fa-solid fa-right-from-bracket"></i>&ensp;登出</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <!-- menuBox -->
+                        <div class="menuBox block">
+                            <div class="" @click="closeBox()"><i class="bi bi-x-circle"></i></div>
+                            <div class="d-flex flex-column justify-content-center align-items-start p-3">
+                                <div class="d-flex px-2" style="flex-wrap: wrap;">
+                                    <a class="nav_btn bg-white" :class="option.color" v-for="option in nav_options" :href="option.url"><img :src="option.img" >{{option.title}}</a>
+                                </div>
+                                <hr class="w-100" style="border-color:#e2f0f1;">
+        
+                                <div class="d-flex flex-wrap px-2">
+                                    <div><a class="sub_btn" href="#">輔材/一般書</a></div>
+                                    <div v-for="subject in subjects">
+                                        <button class="sub_btn" @click="handleSubjectClick(subject.page),changeBreadcrumb(subject.title)" v-if="subject.limits == 'all'">{{subject.title}}</button>
+                                        <button class="sub_btn" @click="handleSubjectClick(subject.page),changeBreadcrumb(subject.title)" v-else-if="subject.limits == 'partially'" style="background-color: rgb(218, 245, 245);">{{subject.title}}</button>
+                                        <p class="sub_btn" v-else style="background-color: #bbbbbb;">{{subject.title}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="userBox block" id="userBox">
+                            <div class="d-flex flex-column justify-content-center align-items-start p-3">
+                                <a class="px-3" href="#">Marc Malonzo (墨馬克)老師</a>
+                                <hr class="w-100" style="border-color:#e2f0f1;">
+        
+                                <div class="d-flex flex-column px-2" style="font-size: 16px;">
+                                    <a href="#" style="margin: 5px;" title="聯絡我們"><i class="fa-regular fa-envelope"></i>&ensp;聯絡我們</a>
+                                    <a href="#" style="margin: 5px;" title="聲明說明"><i class="fa-regular fa-copyright"></i>&ensp;聲明說明</a>
+                                    <a href="#" style="margin: 5px;" title="Q & A"><i class="fa-regular fa-circle-question"></i>&ensp;常見問題</a>
+                                </div>
+                                
+                                <hr class="w-100" style="border-color:#e2f0f1;">
+                                <a class="px-3" href="#"><i class="fa-solid fa-right-from-bracket"></i>&ensp;登出</a>
+                            </div>
+                        </div>
+                </header>
+
+                <!-- main content -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb px-3 m-0" style="background-color: #fff;">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li v-if="breadcrumbText !== ''" class="breadcrumb-item active" aria-current="page">{{breadcrumbText}}</li>
+                    </ol>
+                </nav>
+
+                <object data="main.html" type="text/html" style="width: 100%; height: calc(100vh - 88px - 48px - 48px); overflow-y: scroll;"></object>
+
+                <footer class="py-2 d-flex justify-content-center">&#169; San Min Book Co.,Ltd. All rights reserved</footer>
+            </div>
+            
+        
+
+
+        </div>
+
+
+    </div>
+</body>
+
+
+
+<script>
+$(document).ready(function() {
+    $(".userdrop").hover(
+        function() {
+            $(this).find('.userBox').stop(true, true).fadeIn("fast");
+        },
+        function() {
+            $(this).find('.userBox').stop(true, true).fadeOut("fast");
+        }
+    )
+});
+    
+    const app = Vue.createApp({
+        data() {
+            return {
+                nav_options: [
+                    { url: '#', img: 'images/btn_01.gif', title: '線上測驗', color: 'btn_blue' },
+                    { url: '#', img: 'images/btn_02.gif', title: '電子書', color: 'btn_green' },
+                    { url: '#', img: 'images/btn_03.gif', title: '題庫系統', color: 'btn_blue' },
+                    { url: '#', img: 'images/btn_04.gif', title: '音檔網', color: 'btn_green' },
+                    { url: '#', img: 'images/btn_05.gif', title: '英文學習平台', color: 'btn_orange' },
+                ],
+                subjects : [
+                    {title:"國文", limits:"all", page:"page1"},
+                    {title:"英文", limits:"all", page:"page2"},
+                    {title:"數學", limits:"all", page:"page3"},
+                    {title:"歷史", limits:"all", page:"page4"},
+                    {title:"地理", limits:"all", page:"page5"},
+                    {title:"公民", limits:"all", page:"page6"},
+                    {title:"物理", limits:"all", page:"page7"},
+                    {title:"化學", limits:"all", page:"page8"},
+                    {title:"生物", limits:"all", page:"page9"},
+                    {title:"地科", limits:"partially", page:"page10"},
+                    {title:"生涯規劃", limits:"limited", page:"page11"}
+                ],
+                breadcrumbText: '',
+            }
+        },
+        methods: {
+            handleSubjectClick(page) {
+                // 更新 object 元素的 data
+                $('object').prop('data', page + '.html');
+            },
+            changeBreadcrumb(title) {
+                this.breadcrumbText = title;
+            },
+            openBox() {
+                if ($('.menuBox').is(':visible')) {
+                    $('.menuBox').hide(300);
+                    $('.bi-arrow-90deg-left').addClass('bi-list').removeClass('bi-arrow-90deg-left');
+                } else {
+                    $('.menuBox').show(300);
+                    $('.bi-list').addClass('bi-arrow-90deg-left').removeClass('bi-list');
+                }
+            },
+            closeBox() {
+                $('.menuBox').hide(300);
+                $('.bi-arrow-90deg-left').addClass('bi-list').removeClass('bi-arrow-90deg-left');
+            },
+            slideBox() {
+                $('.userBox').slideToggle(300);
+            }
+        },
+    })
+    app.mount("#app");
+</script>
+
+</html>
